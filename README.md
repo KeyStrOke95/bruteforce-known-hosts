@@ -7,11 +7,13 @@ A tool to bruteforce hashed SSH known_hosts files. It has the ability to parse w
 Basic usage:
 
 ```
-  SSH known_hosts file bruteforce
-   (c) 2013 jtRIPper
+SSH known_hosts file bruteforce
+ (c) 2013 jtRIPper
 
-usage: brute.py [-h] [--network NETWORK] [--file FILE] [--history HISTORY]
-                [--wordlist WORDLIST] [--output OUTPUT]
+usage: bruteforce_known_hosts.py [-h] [--network NETWORK] [--file FILE]
+                                 [--history HISTORY] [--wordlist WORDLIST]
+                                 [--output OUTPUT] [--disable-wordlist]
+                                 [--disable-history] [--disable-network]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -23,6 +25,12 @@ optional arguments:
                         Wordlist directory.
   --output OUTPUT, -o OUTPUT
                         Output file.
+  --disable-wordlist, -r
+                        Disable wordlist search.
+  --disable-history, -p
+                        Disable history search.
+  --disable-network, -q
+                        Disable network search.
 ```
 
 

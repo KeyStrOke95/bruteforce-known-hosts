@@ -170,6 +170,9 @@ def main():
   parser.add_argument("--history", help="Directory to search for history files.", default=os.getcwd())
   parser.add_argument("--wordlist", "-w", help="Wordlist directory.", default=os.getcwd())
   parser.add_argument("--output", "-o", help="Output file.", default=None)
+  parser.add_argument("--disable-wordlist","-r", help="Disable wordlist search.", action='count')
+  parser.add_argument("--disable-history", "-p", help="Disable history search.", action='count')
+  parser.add_argument("--disable-network", "-q", help="Disable network search.", action='count')
   args = parser.parse_args()
 
   start = time.time()
@@ -177,10 +180,13 @@ def main():
   print "Beginning bruteforce at: %s%s%s" % (GREEN, time.asctime(), ENDC)
   print "\nSettings:"
   print "%s known_hosts file:   %s%s%s" % (NOTICE, YELLOW, args.file, ENDC)
-  print "%s Network:            %s%s%s" % (NOTICE, YELLOW, args.network, ENDC)
+  if not args.disable_network:
+    print "%s Network:            %s%s%s" % (NOTICE, YELLOW, args.network, ENDC)
   print "%s Output file:        %s%s%s" % (NOTICE, YELLOW, args.output, ENDC)
-  print "%s History directory:  %s%s%s" % (NOTICE, YELLOW, args.history, ENDC)
-  print "%s Wordlist directory: %s%s%s\n" % (NOTICE, YELLOW, args.wordlist, ENDC)
+  if not args.disable_history:
+    print "%s History directory:  %s%s%s" % (NOTICE, YELLOW, args.history, ENDC)
+  if not args.disable_wordlist:
+    print "%s Wordlist directory: %s%s%s\n" % (NOTICE, YELLOW, args.wordlist, ENDC)
   print "Found hosts:"
 
   if args.output:
@@ -191,9 +197,12 @@ def main():
       quit()
  
   hosts_list = parse_known_hosts(args.file, args.output)
-  hosts_list = check_history_files(hosts_list, args.history, args.output)
-  hosts_list = gen_domain_names(hosts_list, args.wordlist, args.output)
-  gen_ip_addresses(hosts_list, args.network, args.output)
+  if not args.disable_history:
+    hosts_list = check_history_files(hosts_list, args.history, args.output)
+  if not args.disable_wordlist:
+    hosts_list = gen_domain_names(hosts_list, args.wordlist, args.output)
+  if not args.disable_network:
+    gen_ip_addresses(hosts_list, args.network, args.output)
 
   print "\nBruteforce completed at: %s%s%s (%s%d%s seconds)" % (GREEN, time.asctime(), ENDC, BOLD, time.time() - start, ENDC)
 
